@@ -24,10 +24,12 @@ UAC prompt. Registering or removing such a task needs administrator rights, so a
 asks once through UAC. The check mark is on only when the task points at this very executable;
 after moving the binary, turn it on again from the new copy to repoint the task.
 
-The executable's icon is a gauge in a ring on a navy tile.
-
-Footprint: ~350 KB executable (a third of it the embedded icon), single UI thread, about 7 MB private memory, wakes every 2 s
+Footprint: ~240 KB executable, single UI thread, about 7 MB private memory, wakes every 2 s
 (CPU) and 15 s (Bluetooth).
+
+## Download
+
+Prebuilt `tray-info.exe` is attached to each [GitHub release](https://github.com/VladimirTyrin/tray-info/releases).
 
 ## Build and run
 

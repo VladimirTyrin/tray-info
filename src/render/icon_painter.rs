@@ -104,7 +104,7 @@ pub fn paint_icon(spec: &IconSpec, size: i32) -> Result<OwnedIcon> {
 }
 
 /// Scales a symbol glyph to the largest size whose ink fits the box.
-pub(super) fn fit_symbol(glyph: &str, max_width: i32, max_height: i32) -> Result<TextMask> {
+fn fit_symbol(glyph: &str, max_width: i32, max_height: i32) -> Result<TextMask> {
     // Ink grows linearly with the em height, so one probe gives the right scale.
     let probe_height = max_height * 2;
     let probe = TextMask::render(

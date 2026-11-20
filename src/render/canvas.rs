@@ -68,43 +68,6 @@ impl Canvas {
         }
     }
 
-    /// Fills the whole canvas with a square whose corners are rounded by `radius` pixels.
-    #[cfg(test)]
-    pub fn fill_rounded_square(&mut self, radius: f32, color: Rgb) {
-        let size = self.size as f32;
-        let step = 1.0 / SUBSAMPLES as f32;
-        let samples = (SUBSAMPLES * SUBSAMPLES) as f32;
-        for y in 0..self.size {
-            for x in 0..self.size {
-                let mut hits = 0u16;
-                for sy in 0..SUBSAMPLES {
-                    for sx in 0..SUBSAMPLES {
-                        let px = x as f32 + (sx as f32 + 0.5) * step;
-                        let py = y as f32 + (sy as f32 + 0.5) * step;
-                        // Distance to the nearest point of the square shrunk by the radius.
-                        let nearest_x = px.clamp(radius, size - radius);
-                        let nearest_y = py.clamp(radius, size - radius);
-                        if (px - nearest_x).hypot(py - nearest_y) <= radius {
-                            hits += 1;
-                        }
-                    }
-                }
-                self.blend(x, y, color, f32::from(hits) / samples);
-            }
-        }
-    }
-
-    /// Composites another canvas with its top-left corner at (`left`, `top`).
-    #[cfg(test)]
-    pub fn draw_canvas(&mut self, other: &Canvas, left: i32, top: i32) {
-        for y in 0..other.size {
-            for x in 0..other.size {
-                let [b, g, r, a] = other.pixels[(y * other.size + x) as usize].to_le_bytes();
-                self.blend(left + x, top + y, Rgb { r, g, b }, f32::from(a) / 255.0);
-            }
-        }
-    }
-
     fn blend(&mut self, x: i32, y: i32, color: Rgb, coverage: f32) {
         if coverage <= 0.0 || x < 0 || y < 0 || x >= self.size || y >= self.size {
             return;

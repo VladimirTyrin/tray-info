@@ -1,0 +1,66 @@
+# Checks every push and pull request. On master, when the version in Cargo.toml has no release
+# yet, also builds tray-info.exe and publishes it as GitHub release v<version>.
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: windows-2025
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        run: |
+          rustup update stable --no-self-update
+          rustup default stable
+          rustup component add rustfmt clippy
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Format
+        run: cargo fmt --check
+
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+
+      - name: Test
+        run: cargo test
+
+      - name: Find unreleased version
+        id: version
+        if: github.event_name == 'push'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $version = (cargo metadata --no-deps --format-version 1 | ConvertFrom-Json).packages[0].version
+          gh release view "v$version" *> $null
+          $released = $LASTEXITCODE -eq 0
+          $global:LASTEXITCODE = 0
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "release=$(-not $released)".ToLower() >> $env:GITHUB_OUTPUT
+          if ($released) { "v$version is already released" } else { "v$version will be released" }
+
+      - name: Build release
+        if: steps.version.outputs.release == 'true'
+        run: cargo build --release
+
+      - name: Publish release
+        if: steps.version.outputs.release == 'true'
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "v${{ steps.version.outputs.version }}"
+          gh release create $tag target/release/tray-info.exe --target $env:GITHUB_SHA --title $tag --generate-notes

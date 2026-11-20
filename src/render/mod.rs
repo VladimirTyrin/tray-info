@@ -1,5 +1,3 @@
-#[cfg(test)]
-mod app_icon;
 mod canvas;
 mod icon_painter;
 mod icon_spec;
