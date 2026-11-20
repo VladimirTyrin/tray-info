@@ -9,11 +9,10 @@ pub struct Typeface {
 }
 
 impl Typeface {
-    /// Segoe UI Light: one-pixel strokes at tray sizes, thin like Core Temp's digits (Bahnschrift
-    /// Light, its thinnest weight, still looked heavy). GDI picks the weight of these fonts by the
-    /// named instance in the family; three-digit values are condensed to fit.
+    /// Tahoma, the font Core Temp uses for its tray digits: hinted, crisp one-pixel strokes at
+    /// tray sizes. Three-digit values are condensed to fit.
     pub const NUMBERS: Self = Self {
-        family: w!("Segoe UI Light"),
+        family: w!("Tahoma"),
         weight: FW_NORMAL.0,
     };
     /// Pictograms shipped with Windows 11; the set the shell uses for its own icons.

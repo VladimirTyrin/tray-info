@@ -36,12 +36,12 @@ pub fn rasterize(spec: &IconSpec, size: i32) -> Result<Vec<u32>> {
             text,
             color,
         } => {
-            // Tuned at 24 px: an 11 px symbol above 13 px digits, so the two never share a row
+            // Tuned at 24 px: an 11 px symbol above 12 px digits, so the two never share a row
             // and wide numbers do not run into the symbol.
             let symbol_height = size * 11 / 24;
             let glyph = fit_symbol(symbol.glyph(), symbol_height, symbol_height)?;
             canvas.draw_mask(&glyph, 0, 0, *color);
-            let digit_height = size - symbol_height;
+            let digit_height = size / 2;
             let digits = fit_text(text, Typeface::NUMBERS, size, digit_height)?;
             // Centred within the digit band so the "--" placeholder sits where digits would.
             canvas.draw_mask(

@@ -35,9 +35,10 @@ running `tray-info.exe` first. Diagnostics go to `OutputDebugString` (view with 
   `Celsius`, `Watts`, `TemperatureReading`, …).
 - `src/render/` — icon look: `palette.rs` maps readings to an `IconSpec` — `Ring` (Segoe Fluent
   Icons device symbol inside a level ring, for batteries) or `Reading` (small symbol top-left,
-  large Segoe UI Light digits bottom-right, for CPU readings); `icon_painter.rs` rasterises
-  a spec into an `HICON` on a `Canvas` (anti-aliased ring, GDI text masks → alpha). GDI picks
-  font weight by the named instance in the family name ("Segoe UI Light"), not by `lfWeight`.
+  12 px Tahoma digits bottom-right, like Core Temp's, for CPU readings); `icon_painter.rs`
+  rasterises a spec into an `HICON` on a `Canvas` (anti-aliased ring, GDI text masks → alpha).
+  For variable fonts (Segoe UI, Bahnschrift) GDI picks the weight by the named instance in the
+  family name ("Segoe UI Light"), not by `lfWeight`.
 - `src/tray/` — `Shell_NotifyIcon` wrappers, stable icon ids, popup menu (actions only; readings
   live in the tooltips).
 - `src/win/` — thin safe wrappers: configuration manager (`DevNode`), PDH counters, WMI method
