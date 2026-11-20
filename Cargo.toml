@@ -1,0 +1,38 @@
+[package]
+name = "tray-info"
+version = "0.1.0"
+edition = "2024"
+description = "Windows tray indicators: Bluetooth battery levels, CPU temperature and CPU package power"
+
+[dependencies]
+anyhow = "1.0.104"
+windows = { version = "0.62.2", features = [
+    "Win32_Devices_DeviceAndDriverInstallation",
+    "Win32_Devices_Properties",
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_System_Com",
+    "Win32_System_Com_StructuredStorage",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Ole",
+    "Win32_System_Performance",
+    "Win32_System_Registry",
+    "Win32_System_Rpc",
+    "Win32_System_TaskScheduler",
+    "Win32_System_Threading",
+    "Win32_System_Variant",
+    "Win32_System_Wmi",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[profile.release]
+# The app lives in the tray for days: favour a small, lean binary over build speed.
+opt-level = "s"
+lto = true
+codegen-units = 1
+strip = true
+panic = "abort"
