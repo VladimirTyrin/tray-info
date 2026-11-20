@@ -1,6 +1,6 @@
 [package]
 name = "tray-info"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 description = "Windows tray indicators: Bluetooth battery levels, CPU temperature and CPU package power"
 
